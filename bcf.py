@@ -26,13 +26,13 @@ class Bcf(ControlSurfaceComponent):
                                                                  ConfigurableButtonElement(False, MIDI_CC_TYPE, 8, 79),
                                                                  ConfigurableButtonElement(False, MIDI_CC_TYPE, 8, 80)]]
         self.faders: List[EncoderElement] = [EncoderElement(MIDI_CC_TYPE, 8, 1, Live.MidiMap.MapMode.absolute),
-                                              EncoderElement(MIDI_CC_TYPE, 8, 2, Live.MidiMap.MapMode.absolute),
-                                              EncoderElement(MIDI_CC_TYPE, 8, 3, Live.MidiMap.MapMode.absolute),
-                                              EncoderElement(MIDI_CC_TYPE, 8, 4, Live.MidiMap.MapMode.absolute),
-                                              EncoderElement(MIDI_CC_TYPE, 8, 5, Live.MidiMap.MapMode.absolute),
-                                              EncoderElement(MIDI_CC_TYPE, 8, 6, Live.MidiMap.MapMode.absolute),
-                                              EncoderElement(MIDI_CC_TYPE, 8, 7, Live.MidiMap.MapMode.absolute),
-                                              EncoderElement(MIDI_CC_TYPE, 8, 8, Live.MidiMap.MapMode.absolute)]
+                                             EncoderElement(MIDI_CC_TYPE, 8, 2, Live.MidiMap.MapMode.absolute),
+                                             EncoderElement(MIDI_CC_TYPE, 8, 3, Live.MidiMap.MapMode.absolute),
+                                             EncoderElement(MIDI_CC_TYPE, 8, 4, Live.MidiMap.MapMode.absolute),
+                                             EncoderElement(MIDI_CC_TYPE, 8, 5, Live.MidiMap.MapMode.absolute),
+                                             EncoderElement(MIDI_CC_TYPE, 8, 6, Live.MidiMap.MapMode.absolute),
+                                             EncoderElement(MIDI_CC_TYPE, 8, 7, Live.MidiMap.MapMode.absolute),
+                                             EncoderElement(MIDI_CC_TYPE, 8, 8, Live.MidiMap.MapMode.absolute)]
         self._knobs: List[List[EncoderElement]] = [[EncoderElement(MIDI_CC_TYPE, 8, 82, Live.MidiMap.MapMode.absolute),
                                                     EncoderElement(MIDI_CC_TYPE, 8, 83, Live.MidiMap.MapMode.absolute),
                                                     EncoderElement(MIDI_CC_TYPE, 8, 84, Live.MidiMap.MapMode.absolute),

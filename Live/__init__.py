@@ -1,4 +1,7 @@
 from types import ModuleType
+from typing import List
+
+import Live
 
 
 class Application(ModuleType):
@@ -3765,7 +3768,7 @@ class ClipSlot(ModuleType):
             pass
 
         @property
-        def clip(self):
+        def clip(self) -> Live.Clip.Clip:
             """
             Returns the Clip which this clipslots currently owns. Might be None.
             """
@@ -12454,7 +12457,7 @@ class Song(ModuleType):
             pass
 
         @property
-        def tracks(self):
+        def tracks(self) -> List[Live.Track.Track]:
             """
             Const access to a list of all Player Tracks in the Live Song, exludingthe return and Master Track (see also Song.send_tracks and Song.master_track).At least one MIDI or Audio Track is always available.
             """
@@ -14745,7 +14748,7 @@ class Track(ModuleType):
             pass
 
         @property
-        def clip_slots(self):
+        def clip_slots(self) -> List[Live.ClipSlot.ClipSlot]:
             """
             const access to the list of clipslots (see class AClipSlot) for this track.The list will be empty for the master and sendtracks.
             """

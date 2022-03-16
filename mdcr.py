@@ -18,14 +18,13 @@ from _Framework.Util import find_if
 import collections
 
 from .bcf import Bcf
+from .bcr import Bcr
 
 
 class Mdcr(ControlSurface):
     def __init__(self, c_instance):
         super(Mdcr, self).__init__(c_instance)
         with self.component_guard():
-            global _map_modes
-            _map_modes = Live.MidiMap.MapMode
             self.current_track_offset = 0
             self.current_scene_offset = 0
             num_tracks = 8
@@ -33,21 +32,32 @@ class Mdcr(ControlSurface):
             self.transport = TransportComponent()
             self.transport.set_play_button(ButtonElement(True, MIDI_CC_TYPE, 8, 73))
             self.transport.set_stop_button(ButtonElement(True, MIDI_CC_TYPE, 8, 74))
-            global mixer
-            mixer = MixerComponent(num_tracks, num_returns, is_enabled=True, auto_name=True)
+
+            self.mixer = MixerComponent(num_tracks, num_returns, is_enabled=True, auto_name=True)
             self.session = SessionComponent(num_tracks, 4)
             self.session.set_offsets(0, 0)
-            #self.session.set_mixer(self.mixer)
-            mixer.set_track_offset(0)
+            self.session.set_mixer(self.mixer)
+            self.mixer.set_track_offset(0)
             self.song().view.selected_track = self.song().tracks[0]
-            #self._bcf: Bcf = Bcf(self)
-            mixer.channel_strip(0).set_volume_control(EncoderElement(MIDI_CC_TYPE, 8, 0, _map_modes.absolute))
-            mixer.channel_strip(1).set_volume_control(EncoderElement(MIDI_CC_TYPE, 8, 3, _map_modes.absolute))
-            mixer.master_strip().set_volume_control(SliderElement(MIDI_CC_TYPE, 8, 2))
+            self._bcf: Bcf = Bcf(self)
+            self._bcr: Bcr = Bcr(self)
+            #self.mixer.channel_strip(0).set_volume_control(EncoderElement(MIDI_CC_TYPE, 8, 1, Live.MidiMap.MapMode.absolute))
+            self.mixer.channel_strip(0).set_volume_control(self._bcf.faders[0])
+            self.mixer.channel_strip(1).set_volume_control(EncoderElement(MIDI_CC_TYPE, 8, 2, Live.MidiMap.MapMode.absolute))
+            self.mixer.master_strip().set_volume_control(SliderElement(MIDI_CC_TYPE, 8, 8))
             self.show_message("did it?")
             self.set_highlighting_session_component(self.session)
-            self.log_message(" yea?")
-            self.update()
+            self.init_clip_listeners()
+
+    def init_clip_listeners(self):
+        song: Live.Song.Song = self.song()
+        for i in range(len(song.tracks)):
+            for j in range(len(song.tracks[i].clip_slots)):
+                if song.tracks[i].clip_slots[j].has_clip:
+                    song.tracks[i].clip_slots[j].clip.add_playing_status_listener(self.handle_clip_launch)
+
+    def handle_clip_launch(self, clip):
+        self.show_message("test")
 
     def disconnect(self):
         super(Mdcr, self).disconnect()

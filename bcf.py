@@ -65,3 +65,6 @@ class Bcf(ControlSurfaceComponent):
                                                     EncoderElement(MIDI_CC_TYPE, 8, 87, Live.MidiMap.MapMode.absolute),
                                                     EncoderElement(MIDI_CC_TYPE, 8, 88, Live.MidiMap.MapMode.absolute),
                                                     EncoderElement(MIDI_CC_TYPE, 8, 89, Live.MidiMap.MapMode.absolute)]]
+
+    def on_selected_scene_changed(self):
+        self.canonical_parent.show_message("Hello from bcf")

@@ -6,13 +6,15 @@ from .Control import ControlManager
 from .Dependency import dependency, depends
 from .SubjectSlot import Subject
 from .Util import lazy_attribute
+from _Framework.ControlSurface import ControlSurface
+
 
 class ControlSurfaceComponent(ControlManager, Subject):
     u"""
     Base class for all classes encapsulating functions in Live
     """
     name = u''
-    canonical_parent = None
+    canonical_parent: ControlSurface = None
     is_private = False
     _show_msg_callback = dependency(show_message=None)
     _has_task_group = False

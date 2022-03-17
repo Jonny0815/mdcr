@@ -1712,7 +1712,7 @@ class Clip(ModuleType):
             pass
 
         @property
-        def canonical_parent(self):
+        def canonical_parent(self) -> Live.ClipSlot.ClipSlot:
             """
             Get the canonical parent of the Clip.
             """
@@ -3761,7 +3761,7 @@ class ClipSlot(ModuleType):
             pass
 
         @property
-        def canonical_parent(self):
+        def canonical_parent(self) -> Live.Track.Track:
             """
             Get the canonical parent of the ClipSlot.
             """

@@ -1,5 +1,5 @@
 from _Framework.ControlSurfaceComponent import ControlSurfaceComponent
-from Launchpad.ConfigurableButtonElement import ConfigurableButtonElement
+from _Framework.ButtonElement import ButtonElement
 from _Framework.InputControlElement import *
 from _Framework.EncoderElement import EncoderElement
 from typing import List
@@ -10,24 +10,24 @@ class Bcr(ControlSurfaceComponent):
     def __init__(self, *a, **k):
         super(Bcr, self).__init__(*a, **k)
         self._channel = 15
-        self._buttons: List[List[ConfigurableButtonElement]] = [
-            [ConfigurableButtonElement(False, MIDI_CC_TYPE, self._channel, 65),
-             ConfigurableButtonElement(False, MIDI_CC_TYPE, self._channel, 66),
-             ConfigurableButtonElement(False, MIDI_CC_TYPE, self._channel, 67),
-             ConfigurableButtonElement(False, MIDI_CC_TYPE, self._channel, 68),
-             ConfigurableButtonElement(False, MIDI_CC_TYPE, self._channel, 69),
-             ConfigurableButtonElement(False, MIDI_CC_TYPE, self._channel, 70),
-             ConfigurableButtonElement(False, MIDI_CC_TYPE, self._channel, 71),
-             ConfigurableButtonElement(False, MIDI_CC_TYPE, self._channel, 72)],
-            [ConfigurableButtonElement(False, MIDI_CC_TYPE, self._channel, 73),
-             ConfigurableButtonElement(False, MIDI_CC_TYPE, self._channel, 74),
-             ConfigurableButtonElement(False, MIDI_CC_TYPE, self._channel, 75),
-             ConfigurableButtonElement(False, MIDI_CC_TYPE, self._channel, 76),
-             ConfigurableButtonElement(False, MIDI_CC_TYPE, self._channel, 77),
-             ConfigurableButtonElement(False, MIDI_CC_TYPE, self._channel, 78),
-             ConfigurableButtonElement(False, MIDI_CC_TYPE, self._channel, 79),
-             ConfigurableButtonElement(False, MIDI_CC_TYPE, self._channel, 80)]]
-        self._bot_knobs: List[List[EncoderElement]] = [
+        self._buttons: List[List[ButtonElement]] = [
+            [ButtonElement(False, MIDI_CC_TYPE, self._channel, 65),
+             ButtonElement(False, MIDI_CC_TYPE, self._channel, 66),
+             ButtonElement(False, MIDI_CC_TYPE, self._channel, 67),
+             ButtonElement(False, MIDI_CC_TYPE, self._channel, 68),
+             ButtonElement(False, MIDI_CC_TYPE, self._channel, 69),
+             ButtonElement(False, MIDI_CC_TYPE, self._channel, 70),
+             ButtonElement(False, MIDI_CC_TYPE, self._channel, 71),
+             ButtonElement(False, MIDI_CC_TYPE, self._channel, 72)],
+            [ButtonElement(False, MIDI_CC_TYPE, self._channel, 73),
+             ButtonElement(False, MIDI_CC_TYPE, self._channel, 74),
+             ButtonElement(False, MIDI_CC_TYPE, self._channel, 75),
+             ButtonElement(False, MIDI_CC_TYPE, self._channel, 76),
+             ButtonElement(False, MIDI_CC_TYPE, self._channel, 77),
+             ButtonElement(False, MIDI_CC_TYPE, self._channel, 78),
+             ButtonElement(False, MIDI_CC_TYPE, self._channel, 79),
+             ButtonElement(False, MIDI_CC_TYPE, self._channel, 80)]]
+        self.bot_knobs: List[List[EncoderElement]] = [
             [EncoderElement(MIDI_CC_TYPE, self._channel, 97, Live.MidiMap.MapMode.absolute),  # red
              EncoderElement(MIDI_CC_TYPE, self._channel, 89, Live.MidiMap.MapMode.absolute),
              EncoderElement(MIDI_CC_TYPE, self._channel, 81, Live.MidiMap.MapMode.absolute)],

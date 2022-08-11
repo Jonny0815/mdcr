@@ -119,6 +119,7 @@ class ToggleButton(InputControlElement, ButtonElementMixin):
         except SkinColorMissingError:
             super(ToggleButton, self).set_light(value)
 
+    # dirty fix, clean me up some time!
     def receive_value(self, value):
         if self._toggle == 1:
             self._toggle = 0

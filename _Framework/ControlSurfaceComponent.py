@@ -95,7 +95,7 @@ class ControlSurfaceComponent(ControlManager, Subject):
     def application(self):
         return Live.Application.get_application()
 
-    def song(self):
+    def song(self) -> Live.Song.Song:
         return self._song
 
     @lazy_attribute

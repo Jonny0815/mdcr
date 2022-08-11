@@ -20,9 +20,11 @@ import time
 from itertools import chain
 from _Framework.Util import find_if
 import collections
+import json
 
-from typing import Dict
+from typing import Dict, List
 
+from.ParameterMapping import ParameterMapping
 from .bcf import Bcf
 from .bcr import Bcr
 from .fcb import Fcb
@@ -36,6 +38,7 @@ class Mdcr(ControlSurface):
             self.current_scene_offset = 0
             num_tracks = 8
             num_returns = 2
+            self._knob_mappings: Dict[str, List[ParameterMapping]] = {}
             self._active_tracks: Dict[int, Live.Track.Track] = {14: None,  # 14 red
                                                                 9: None,  # 9 blue
                                                                 3: None,  # 3 yellow
@@ -57,24 +60,37 @@ class Mdcr(ControlSurface):
             # self.mixer.channel_strip(0).set_volume_control(EncoderElement(MIDI_CC_TYPE, 8, 1, Live.MidiMap.MapMode.absolute))
             # self.mixer.channel_strip(0).set_volume_control(self._bcf.faders[0])
             # self.test_listener.subject = self._bcf._buttons[1][0]
-            #self.mixer.channel_strip(0).set_mute_button(ToggleButton(True, MIDI_CC_TYPE, 8, 73, c_instance))
-            #self.mixer.channel_strip(0).set_mute_button(self._bcf._buttons[1][0])
-            self.show_message("did it?")
+            # self.mixer.channel_strip(0).set_mute_button(ToggleButton(True, MIDI_CC_TYPE, 8, 73, c_instance))
+            # self.mixer.channel_strip(0).set_mute_button(self._bcf._buttons[1][0])
             self.set_highlighting_session_component(self.session)
             self.init_clip_listeners()
-            self.song().add_tracks_listener(self.handle_new_track)
+            self._tracks: List[Live.Track.Track] = self.song().tracks
+            self._scenes: List[Live.Scene.Scene] = self.song().scenes
+            self.song().add_tracks_listener(self.handle_tracks_change)
+            self.song().add_scenes_listener(self.handle_scenes_change)
 
     def init_clip_listeners(self):
         song: Live.Song.Song = self.song()
         for i in range(len(song.tracks)):
             for j in range(len(song.tracks[i].clip_slots)):
-                if song.tracks[i].clip_slots[j].has_clip:
-                    # song.tracks[i].clip_slots[j].clip.add_playing_status_listener(self.handle_clip_launch)
+                if song.tracks[i].clip_slots[j].has_clip:  # add listener for all clips
                     song.tracks[i].clip_slots[j].clip.add_playing_status_listener(
                         partial(self.handle_clip_launch, song.tracks[i].clip_slots[j].clip))
+                else:
+                    song.tracks[i].clip_slots[j].add_has_clip_listener(
+                        partial(self.handle_new_clip, song.tracks[i].clip_slots[j]))
 
-    def handle_new_track(self):
+    def handle_scenes_change(self):
+        self.show_message("scenes changed")
+
+    def handle_tracks_change(self):
         self.show_message("new track added")
+
+
+
+    def handle_new_clip(self, clip_slot: Live.ClipSlot.ClipSlot):
+        if clip_slot.has_clip:
+            clip_slot.add_playing_status_listener(partial(self.handle_clip_launch, clip_slot.clip))
 
     def handle_clip_launch(self, clip: Live.Clip.Clip):
         self.show_message("hello from handle clip launch: " + str(clip.color_index))
@@ -99,6 +115,7 @@ class Mdcr(ControlSurface):
                         self._bcf.get_volume_control(clip))
                     self.mixer.channel_strip(index).set_mute_button(self._bcf.get_arm_button(clip))
                     self.mixer.channel_strip(index).set_solo_button(self._bcf.get_cue_button(clip))
+                    self._bcr.map_encoders(clip, self._knob_mappings[self.get_clip_id(clip)])
 
         self.show_message(
             "track: " + str(self._active_tracks[clip.color_index]) + " has color: " + str(clip.color_index))
@@ -109,13 +126,12 @@ class Mdcr(ControlSurface):
             if tracks[i] == track:
                 return i
 
+    def get_clip_id(self, clip: Live.Clip.Clip) -> str:
+        return "todo"#to do
+
     @subject_slot("value")
     def test_listener(self, value):
         self.show_message("test listener with value: " + str(value))
-        if value == 127:
-            self.song().tracks[0].mute = 0
-        if value == 0:
-            self.song().tracks[0].mute = 127
 
     def disconnect(self):
         super(Mdcr, self).disconnect()

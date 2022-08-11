@@ -1,5 +1,5 @@
 from types import ModuleType
-from typing import List
+from typing import List, Tuple, Dict
 
 import Live
 
@@ -4726,7 +4726,7 @@ class Device(ModuleType):
             pass
 
         @property
-        def parameters(self):
+        def parameters(self) -> List[Live.DeviceParameter.DeviceParameter]:
             """
             Const access to the list of available automatable parameters for this device.
             """
@@ -14804,7 +14804,7 @@ class Track(ModuleType):
             pass
 
         @property
-        def devices(self):
+        def devices(self) -> List[Live.Device.Device]:
             """
             Return const access to all available Devices that are present in the TracksDevicechain. This tuple will also include the 'mixer_device' that every Trackalways has.
             """

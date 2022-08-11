@@ -6,7 +6,7 @@ from typing import List
 import Live
 
 
-class Fcb(ControlSurfaceComponent):
+class Fcb(ControlSurfaceComponent):  # hardware settings to do, wired shit happening
     def __init__(self, *a, **k):
         super(Fcb, self).__init__(*a, **k)
         self._channel = 0
@@ -23,4 +23,4 @@ class Fcb(ControlSurfaceComponent):
             ButtonElement(False, MIDI_CC_TYPE, self._channel, 9),
             ButtonElement(False, MIDI_CC_TYPE, self._channel, 10)]
         self._pedal_left = EncoderElement(MIDI_CC_TYPE, self._channel, 7, Live.MidiMap.MapMode.absolute)
-        self._pedal_right = EncoderElement(MIDI_CC_TYPE, self._channel, 27)
+        self._pedal_right = EncoderElement(MIDI_CC_TYPE, self._channel, 27, Live.MidiMap.MapMode.absolute)

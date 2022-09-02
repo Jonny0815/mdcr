@@ -3,7 +3,7 @@ from _Framework.ButtonElement import ButtonElement
 from _Framework.InputControlElement import *
 from _Framework.EncoderElement import EncoderElement
 from _Framework.SubjectSlot import *
-from typing import List
+from typing import List, Dict
 import Live
 
 from .ParameterMapping import ParameterMapping
@@ -25,10 +25,10 @@ class Bcr(ControlSurfaceComponent):
     def __init__(self, *a, **k):
         super(Bcr, self).__init__(*a, **k)
         self._top_knobs = None
-        self.bot_knobs = None
+        self.bot_knobs: List[List[EncoderElement]] = None
         self._buttons = None
         self._channel = None
-        self._active_mappings: List[List[ParameterMapping]] = [[]]
+        self._active_mappings: Dict[int, List[ParameterMapping]] = {}
         self.init_buttons_and_encoders()
 
     def init_buttons_and_encoders(self):
@@ -109,9 +109,17 @@ class Bcr(ControlSurfaceComponent):
              EncoderElement(MIDI_CC_TYPE, self._channel, 88, Live.MidiMap.MapMode.absolute),
              EncoderElement(MIDI_CC_TYPE, self._channel, 89, Live.MidiMap.MapMode.absolute)]]
 
+    def get_track_index(self, track: Live.Track.Track) -> int:
+        tracks = self.song().tracks
+        for i in range(len(tracks)):
+            if tracks[i] == track:
+                return i
+
     def map_encoders(self, clip: Live.Clip.Clip, parameters: List[ParameterMapping]):
-        index: int = translate_color_index(clip.color_index)
-        self._active_mappings[index] = parameters
-        for i in range(len(self._active_mappings[index])):
-            self._active_mappings[index][i].parameter_listener.subject = self.bot_knobs[index][i]  # 3 encoders only at this moment!
-        self.canonical_parent.show_message("yea")
+        if parameters:
+            index: int = translate_color_index(clip.color_index)
+            self._active_mappings[index] = parameters
+            for i in range(len(self._active_mappings[index])):
+                encoder_value: int = self.song().tracks[self.get_track_index(clip.canonical_parent.canonical_parent)].devices[0].parameters[i + 1].value  # +1 because first parameter is on/off of device
+                self.bot_knobs[index][i].send_value(encoder_value)
+                self._active_mappings[index][i].parameter_listener.subject = self.bot_knobs[index][i]  # 3 encoders only at this moment!

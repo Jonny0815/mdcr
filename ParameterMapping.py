@@ -18,4 +18,5 @@ class ParameterMapping(ControlSurfaceComponent):
     def parameter_listener(self, value):
         self.song().tracks[self.track_id].devices[self.device_id].parameters[self.parameter_id].value = value
 
-    def assign_encoder(self, ):
+    def assign_encoder(self, encoder: EncoderElement):
+        self.parameter_listener.subject = encoder

@@ -84,11 +84,11 @@ class Bcf(ControlSurfaceComponent):
     def get_volume_control(self, clip: Live.Clip.Clip) -> EncoderElement:
         return self.faders[translate_color_index(clip.color_index)]
 
-    def get_arm_button(self, clip: Live.Clip.Clip) -> ButtonElement:
+    def get_arm_button(self, clip: Live.Clip.Clip) -> ToggleButton:
         return self._buttons[1][translate_color_index(clip.color_index)]
 
-    def get_cue_button(self, clip: Live.Clip.Clip) -> ButtonElement:
+    def get_cue_button(self, clip: Live.Clip.Clip) -> ToggleButton:
         return self._buttons[0][translate_color_index(clip.color_index)]
 
-    def on_selected_scene_changed(self):
-        self.canonical_parent.show_message("Hello from bcf")
+    #def on_selected_scene_changed(self):
+        #self.canonical_parent.show_message("Hello from bcf")
